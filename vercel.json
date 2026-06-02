@@ -1,6 +1,7 @@
 {
   "version": 2,
-  "routes": [
-    { "src": "/", "dest": "/Hum.html" }
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/", "destination": "/Hum.html" }
   ]
 }
