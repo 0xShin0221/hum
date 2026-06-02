@@ -1,10 +1,6 @@
 {
   "version": 2,
-  "builds": [
-    { "src": "Hum.html", "use": "@vercel/static" }
-  ],
   "routes": [
-    { "src": "/", "dest": "/Hum.html" },
-    { "src": "/(.*)", "dest": "/$1" }
+    { "src": "/", "dest": "/Hum.html" }
   ]
 }
