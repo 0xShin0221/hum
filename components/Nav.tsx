@@ -8,10 +8,11 @@ interface NavProps {
   theme: 'dark' | 'light'
   onToggleTheme: () => void
   onChangeLang: (lang: Lang) => void
+  onOpenWaitlist: () => void
   t: (key: string) => string
 }
 
-export default function Nav({ lang, theme, onToggleTheme, onChangeLang, t }: NavProps) {
+export default function Nav({ lang, theme, onToggleTheme, onChangeLang, onOpenWaitlist, t }: NavProps) {
   const [scrolled, setScrolled] = useState(false)
   const [langOpen, setLangOpen] = useState(false)
   const langRef = useRef<HTMLDivElement>(null)
@@ -110,9 +111,9 @@ export default function Nav({ lang, theme, onToggleTheme, onChangeLang, t }: Nav
             </svg>
           </button>
 
-          <a className="btn btn--primary btn--sm nav__cta" href="#download">
+          <button className="btn btn--primary btn--sm nav__cta" onClick={onOpenWaitlist}>
             <span data-i18n="nav.download">{t('nav.download')}</span>
-          </a>
+          </button>
         </div>
       </div>
     </header>

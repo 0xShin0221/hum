@@ -1,12 +1,13 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useCallback, useState } from 'react'
 import Nav from '../components/Nav'
 import Hero from '../components/Hero/Hero'
 import UseCases from '../components/UseCases'
 import Features from '../components/Features'
 import Closing from '../components/Closing'
 import Footer from '../components/Footer'
+import WaitlistModal from '../components/WaitlistModal'
 import { useTheme } from '../hooks/useTheme'
 import { useLang } from '../hooks/useLang'
 import { useTranscript } from '../hooks/useTranscript'
@@ -17,15 +18,10 @@ export default function HumPage() {
   const { theme, toggleTheme } = useTheme()
   const { lang, applyLang, t } = useLang()
   const { state: transcriptState, setPattern, setPaused } = useTranscript(lang, 'A' as TranscriptPattern)
+  const [waitlistOpen, setWaitlistOpen] = useState(false)
 
-  // Expose setPattern via HumApp for Tweaks panel
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    const win = window as Window & { HumApp?: Record<string, unknown> }
-    if (win.HumApp) {
-      win.HumApp.setTranscriptPattern = (p: unknown) => setPattern(p as TranscriptPattern)
-    }
-  }, [setPattern])
+  const openWaitlist = useCallback(() => setWaitlistOpen(true), [])
+  const closeWaitlist = useCallback(() => setWaitlistOpen(false), [])
 
   useReveal()
 
@@ -36,6 +32,7 @@ export default function HumPage() {
         theme={theme}
         onToggleTheme={toggleTheme}
         onChangeLang={applyLang}
+        onOpenWaitlist={openWaitlist}
         t={t}
       />
       <main id="top">
@@ -43,12 +40,14 @@ export default function HumPage() {
           t={t}
           transcriptState={transcriptState}
           onTogglePause={setPaused}
+          onOpenWaitlist={openWaitlist}
         />
         <UseCases t={t} />
         <Features t={t} />
-        <Closing t={t} />
+        <Closing t={t} onOpenWaitlist={openWaitlist} />
       </main>
       <Footer t={t} />
+      <WaitlistModal open={waitlistOpen} onClose={closeWaitlist} t={t} />
     </>
   )
 }

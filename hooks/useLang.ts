@@ -9,26 +9,10 @@ export function useLang() {
   const [lang, setLangState] = useState<Lang>('ja')
 
   const applyLang = useCallback((next: Lang) => {
-    const dict = HUM_I18N[next] || HUM_I18N.ja
+    if (!HUM_I18N[next]) return
     document.documentElement.setAttribute('lang', next)
     try { localStorage.setItem(LS_KEY, next) } catch {}
     setLangState(next)
-
-    // Apply data-i18n to all elements
-    document.querySelectorAll('[data-i18n]').forEach((el) => {
-      const key = el.getAttribute('data-i18n')!
-      const val = dict[key] || HUM_I18N.ja[key] || key
-      el.textContent = val
-    })
-
-    // Update language menu current state
-    document.querySelectorAll('.lang__menu button').forEach((b) => {
-      const btnLang = (b as HTMLElement).getAttribute('data-lang')
-      b.setAttribute('aria-current', String(btnLang === next))
-    })
-
-    const cur = document.getElementById('langCurrent')
-    if (cur) cur.textContent = dict._sub
   }, [])
 
   useEffect(() => {
